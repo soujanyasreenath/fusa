@@ -24,6 +24,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/api/get_search_filters', routes);
+app.post('/api/get_filtered_products', routes);
 app.get('/templates/:name', partials);
 
 // catch 404 and forward to error handler
