@@ -3,6 +3,7 @@
     "host": "localhost",
     "user": "root",
     "password": "root",
+    "driver": "mysql",
     "port": 3306,
     "database": "search"
   },
@@ -11,6 +12,7 @@
     "host": "localhost",
     "user": "root",
     "password": "root",
+    "driver": "mysql",
     "port": 3306,
     "database": "search"
   }
