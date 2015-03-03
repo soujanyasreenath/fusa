@@ -7,7 +7,7 @@ var bodyParser = require('body-parser');
 var routes = require('./routes/index');
 var partials = require('./routes/partials');
 var app = express();
-var dbOptions = require('./config/database.json')[app.get('env')];
+var dbOptions = require('./database.json')[app.get('env')];
 var mysql = require('mysql'), // node-mysql module
 connection = require('express-myconnection'); // express-myconnection module
 app.use(connection(mysql, dbOptions, 'single'));
