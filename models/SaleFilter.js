@@ -5,11 +5,7 @@ exports.get_all_sales = function(req, callback) {
   req.getConnection(function(err, connection) {
     if (err) {
       console.error('CONNECTION error: ',err);
-      res.statusCode = 503;
-      res.send({
-        result: 'error',
-        err: err.code
-      });
+      return callback({ "error": err , "status": 500 });
     }
     else {
       if(req.param('path') != undefined) {
@@ -24,6 +20,7 @@ exports.get_all_sales = function(req, callback) {
         connection.query(sql,function(err, rows) {
           if(err) {
             console.log("Error Selecting : %s ",err );
+            return callback({ "error": err , "status": 500 });
           }
           else {
             return callback({"sales": rows ,"status": 200,"count" : count});
@@ -37,15 +34,11 @@ exports.get_all_sales = function(req, callback) {
   });
 };
 
-exports.get_sale_filters = function(ids,req, callback) {
+exports.get_sale_filters = function(ids, req, callback) {
   req.getConnection(function(err, connection) {
     if (err) {
       console.error('CONNECTION error: ',err);
-      res.statusCode = 503;
-      res.send({
-        result: 'error',
-        err: err.code
-      });
+      return callback({ "error": err , "status": 500 });
     }
     else {
       if (ids.length > 0) {
@@ -70,6 +63,7 @@ exports.get_sale_filters = function(ids,req, callback) {
 	  });
           if(err) {
             console.log("Error Selecting : %s ",err );
+            return callback({ "error": err , "status": 500 });
           }
           else {
             return callback({ "filters": a_hash ,"status": 200 });
@@ -84,15 +78,11 @@ exports.get_sale_filters = function(ids,req, callback) {
 };
 
 
-exports.get_filtered_sales = function(ids,req, callback) {
+exports.get_filtered_sales = function(ids, req, callback) {
   req.getConnection(function(err, connection) {
     if (err) {
       console.error('CONNECTION error: ',err);
-      res.statusCode = 503;
-      res.send({
-        result: 'error',
-        err: err.code
-      });
+      return callback({ "error": err , "status": 500 });
     }
     else {
       if(ids.length > 0) {
@@ -122,6 +112,7 @@ exports.get_filtered_sales = function(ids,req, callback) {
         connection.query(sql_count,function(err, rows) {
           if(err) {
             console.log("Error Selecting : %s ",err );
+            return callback({ "error": err , "status": 500 });
           }
           else {
             count = rows[0]["count"];
@@ -131,6 +122,7 @@ exports.get_filtered_sales = function(ids,req, callback) {
         connection.query(sql,function(err, rows) {
           if(err) {
             console.log("Error Selecting : %s ", err );
+            return callback({ "error": err , "status": 500 });
           }
           else {
             return callback({"sales": rows ,"status": 200,"count" : count});

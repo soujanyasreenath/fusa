@@ -5,14 +5,10 @@ exports.get_all_products = function(req, callback) {
   req.getConnection(function(err, connection) {
     if (err) {
       console.error('CONNECTION error: ',err);
-      res.statusCode = 503;
-      res.send({
-        result: 'error',
-        err: err.code
-      });
+      return callback({ "error": err , "status": 500 });
     }
     else {
-      if(req.param('path') != undefined) {
+      if (req.param('path') != undefined) {
         var count = 0
         var sql = "select distinct product_id from search_products";
         sql = sql + " where path = ?"
@@ -22,8 +18,9 @@ exports.get_all_products = function(req, callback) {
         var inserts = [req.param('path'), parseInt(req.param.per_page), parseInt(req.param.page)];
         sql = mysql.format(sql, inserts);
         connection.query(sql, function(err, rows) {
-          if(err) {
+          if (err) {
             console.log("Error Selecting : %s ",err );
+            return callback({ "error": err , "status": 500 });
           }
           else {
             return callback({"products": rows ,"status": 200,"count" : count});

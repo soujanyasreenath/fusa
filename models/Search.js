@@ -4,12 +4,8 @@ var mysql   = require('mysql');
 exports.get_search = function(req, callback) {
   req.getConnection(function(err, connection) {
     if (err) {
-      console.error('CONNECTION error: ',err);
-      res.statusCode = 503;
-      res.send({
-        result: 'error',
-        err: err.code
-      });
+      console.error('CONNECTION error: ', err);
+      return callback({ "error": err , "status": 500 });
     }
     else {
       if(req.param('keywords') != undefined) {
@@ -34,19 +30,26 @@ exports.get_search = function(req, callback) {
         var sql_inserts = ['%' + req.param('keywords') + '%', '%' + req.param('keywords') + '%', '%' + req.param('keywords') + '%', '%' + req.param('keywords')+'%'];
         sql_count = mysql.format(sql_count, sql_inserts);
         connection.query(sql_count, function(err, rows) {
-          count = rows[0]["count"];
+          if(err) {
+            console.log("Error Selecting : %s ", err );
+            return callback({ "error": err , "status": 500 });
+          }
+          else {
+            count = rows[0]["count"];
+          }
         });
         connection.query(sql, function(err, rows) {
           if(err) {
             console.log("Error Selecting : %s ", err );
+            return callback({ "error": err , "status": 500 });
           }
           else {
-            return callback({"products": rows ,"status":200,"count" : count});
+            return callback({ "products": rows ,"status": 200,"count" : count });
           }
         });
       }
       else {
-        return callback({"products": "Please provide keywords" ,"status": 404});
+        return callback({ "products": "Please provide keywords" ,"status": 404 });
       }
     }
   });
@@ -55,12 +58,8 @@ exports.get_search = function(req, callback) {
 exports.get_filters = function(ids, req, callback) {
   req.getConnection(function(err, connection) {
     if (err) {
-      console.error('CONNECTION error: ',err);
-      res.statusCode = 503;
-      res.send({
-        result: 'error',
-        err: err.code
-      });
+      console.error('CONNECTION error: ', err);
+      return callback({ "error": err , "status": 500 });
     }
     else {
       if(ids.length > 0) {
@@ -69,7 +68,7 @@ exports.get_filters = function(ids, req, callback) {
         var inserts = [ids];
         sql = mysql.format(sql, inserts);
 
-        connection.query(sql, function(err,rows) {
+        connection.query(sql, function(err, rows) {
           rows.forEach( function (arrayItem) {
 	    for (var key in arrayItem) {
 	      var key_str = key;
@@ -85,18 +84,19 @@ exports.get_filters = function(ids, req, callback) {
 	      }
 	    };
 	  });
-          a_hash["price"] = a_hash["price"].sort( function(a,b){ return a-b });
+          a_hash["price"] = a_hash["price"].sort( function(a, b){ return a-b });
           a_hash["price"] = [Math.min.apply(Math, a_hash["price"]), Math.max.apply(Math, a_hash["price"])]
           if(err) {
-            console.log("Error Selecting : %s ",err );
+            console.log("Error Selecting : %s ", err );
+            return callback({ "error": err , "status": 500 });
           }
           else {
-            return callback({"filters": a_hash ,"status": 200});
+            return callback({ "filters": a_hash , "status": 200 });
           }
         });
       }
       else {
-        return callback({"filters": "Please provide valid ids" ,"status": 404});
+        return callback({ "filters": "Please provide valid ids" , "status": 404 });
       }
     }
   });
@@ -106,12 +106,7 @@ exports.get_filters = function(ids, req, callback) {
 exports.get_filtered_products = function(ids, req, callback) {
   req.getConnection(function(err, connection) {
     if (err) {
-      console.error('CONNECTION error: ',err);
-      res.statusCode = 503;
-      res.send({
-        result: 'error',
-        err: err.code
-      });
+      console.error('CONNECTION error: ', err);
     }
     else {
       if (ids.length > 0) {
@@ -131,10 +126,10 @@ exports.get_filtered_products = function(ids, req, callback) {
           sql = sql + " price between ? and ? and"
         }
         sql = sql + " 1=1 and product_id IN (?)"
-        if (new_hash["sort_by"]=="ASC") {
+        if (new_hash["sort_by"] == "ASC") {
           sql = sql + " ORDER BY search_products.price ASC"
         }
-        else if(new_hash["sort_by"]=="DESC") {
+        else if(new_hash["sort_by"] == "DESC") {
           sql = sql + " ORDER BY search_products.price DESC"
         }
         sql = sql + " LIMIT ? OFFSET ?"
@@ -151,33 +146,35 @@ exports.get_filtered_products = function(ids, req, callback) {
           sql_count = sql_count + " price between ? and ? and"
         }
         sql_count = sql_count + " 1=1 and product_id IN (?)"
-        if (new_hash["sort_by"]=="ASC") {
+        if (new_hash["sort_by"] == "ASC") {
           sql_count = sql_count + " ORDER BY search_products.price ASC"
         }
-        else if(new_hash["sort_by"]=="DESC") {
+        else if(new_hash["sort_by"] == "DESC") {
           sql_count = sql_count + " ORDER BY search_products.price DESC"
         }
         var inserts = value_hash.concat.apply(value_hash, [new_hash["price"]["min"], new_hash["price"]["max"], [ids]]);
         sql_count = mysql.format(sql_count, inserts);
-        connection.query(sql_count,function(err,rows) {
+        connection.query(sql_count, function(err, rows) {
           if(err) {
-            console.log("Error Selecting : %s ",err );
+            console.log("Error Selecting : %s ", err );
+	    return callback({ "error": err , "status": 500 });
           }
           else {
             count = rows[0]["count"];
           }
         });
-        connection.query(sql,function(err,rows) {
+        connection.query(sql,function(err, rows) {
           if(err) {
-            console.log("Error Selecting : %s ",err );
+            console.log("Error Selecting : %s ", err );
+	    return callback({ "error": err , "status": 500 });
           }
           else {
-            return callback({"products": rows ,"status": 200,"count" : count});
+            return callback({ "products": rows , "status": 200, "count" : count });
           }
         });
       }
       else {
-        return callback({"products": "Please provide valid ids" ,"status": 404});
+        return callback({ "products": "Please provide valid ids" , "status": 404 });
       }
     }
   });
