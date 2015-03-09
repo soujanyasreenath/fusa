@@ -29,6 +29,14 @@ app.get('/api/get_sale_filters', routes);
 app.post('/api/get_filtered_sales', routes);
 app.get('/api/get_product_filters', routes);
 app.post('/api/get_filtered_products', routes);
+app.get('/api/curation_newin_index', routes);
+app.post('/api/curation_newin_create', routes);
+app.post('/api/curation_newin_update', routes);
+app.post('/api/curation_newin_delete', routes);
+app.get('/api/curationFeaturedSale_index', routes);
+app.post('/api/curationFeaturedSale_create', routes);
+app.post('/api/curationFeaturedSale_update', routes);
+app.post('/api/curationFeaturedSale_delete', routes);
 app.get('/templates/:name', partials);
 
 // catch 404 and forward to error handler
