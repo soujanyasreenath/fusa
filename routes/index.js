@@ -6,6 +6,7 @@ var productFilterController = require('../controllers/productFilterController');
 var curationNewinController = require('../controllers/curationNewinController');
 var curationFeaturedSaleController = require('../controllers/curationFeaturedSaleController');
 
+
 /* Routes for Search and Filters. */
 router.get('/api/populate_filters', function(req, res) {
   searchController.populate_filters(req, res);
