@@ -5,7 +5,7 @@ var path = require('path');
 
 exports.up = function(db, callback) {
   var filePath = path.join(__dirname + '/sqls/20150305062549-curation-newin-up.sql');
-  fs.readFile(filePath, {encoding: 'utf-8'}, function(err,data){
+  fs.readFile(filePath, {encoding: 'utf-8'}, function(err, data) {
     if (err) return callback(err);
       console.log('received data: ' + data);
 
@@ -18,7 +18,7 @@ exports.up = function(db, callback) {
 
 exports.down = function(db, callback) {
   var filePath = path.join(__dirname + '/sqls/20150305062549-curation-newin-down.sql');
-  fs.readFile(filePath, {encoding: 'utf-8'}, function(err,data){
+  fs.readFile(filePath, {encoding: 'utf-8'}, function(err, data) {
     if (err) return callback(err);
       console.log('received data: ' + data);
 

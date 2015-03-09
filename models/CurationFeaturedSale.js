@@ -12,7 +12,7 @@ exports.get_all_curated_featured_sales = function(req, callback) {
     } 
     else {
       sql = "select * from curation_featured_sale"
-      connection.query(sql, function(err, rows){
+      connection.query(sql, function(err, rows) {
         if (err) {
           console.log("Error Selecting : %s ",err );
           return callback({
