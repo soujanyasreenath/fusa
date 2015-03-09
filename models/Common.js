@@ -19,3 +19,23 @@ exports.paginate = function(record_count, current_page, page_size) {
 exports.compute_offset = function(page) {
   return parseInt(page) == 1 ? 0 : 24 * (page - 1);
 }
+
+exports.execute_query = function(req, sql_query, callback) {
+  req.getConnection(function(err, connection) {
+    if (err) {
+      console.error('CONNECTION error: ', err);
+      return callback({"error": err, "status": 500});
+    }
+    else {
+      connection.query(sql_query, function(err, rows) {
+        if(err) {
+          console.log("Error Selecting : %s ", err);
+          return callback({"error": err, "status": 500});
+        }
+        else {
+           return callback({"data": rows, "status": 200});
+        }
+      });
+    }
+  });
+}
