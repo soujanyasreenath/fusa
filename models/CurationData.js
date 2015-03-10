@@ -46,21 +46,21 @@ exports.get_all_curated_data = function(req, table_name, callback) {
 */
 
 exports.create = function(req, table_name, callback) {
-  Common.destroy_all(req, table_name, function(results){
+  Common.destroy_all(req, table_name, function(results) {
     if (results.data == "Success") {
       var columns = '';
       var sql = '';
       var values = [];
-      req.getConnection(function(err, connection) {
-        columns = Object.keys(req.body.data[1]); //Get the column names
-        sql = "insert into " + table_name + " (" + columns + ") values ?"; // TODO: Rework?
-      })
+      columns = Object.keys(req.body.data[1]); //Get the column names
+      sql = "insert into " + table_name + " (" + columns + ") values ?"; // TODO: Rework?
       // Parse the values of the request data to insert sql format.
       // Collects all the values tobe inserted
 
       if (Array.isArray(req.body.data) == true) {
         req.body.data.forEach( function(element) {
-          values.push(Object.keys(element).map(function(key){return element[key]})); 
+          values.push(Object.keys(element).map(function(key) {
+            return element[key]
+          })); 
         });
         if (values.length <= 0) {
           return callback({"Error": "Received an empty data set.", "status": 500});
@@ -74,7 +74,6 @@ exports.create = function(req, table_name, callback) {
       // Sql is executed in Common Lib js
 
       sql = mysql.format(sql, [values]);
-      console.log(sql);
       Common.execute_query(req, sql, function(results) {
         if(results["data"] != undefined) {
           curated_tags = results["data"];
@@ -85,7 +84,7 @@ exports.create = function(req, table_name, callback) {
         }
       });
     }
-    else{
+    else {
       return callback({"Error": results["error"], "status": results["status"]});
     }
   });
