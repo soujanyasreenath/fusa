@@ -1,3 +1,5 @@
+var mysql = require('mysql');
+
 exports.fetch_ids = function(data, val) {
   var ids = [];
   for(var key in data) {
@@ -40,3 +42,18 @@ exports.execute_query = function(req, sql_query, callback) {
     }
   });
 }
+
+
+exports.destroy_all = function(req,table, callback) {
+  var sql = "truncate " + table;
+  var inserts = []
+  sql = mysql.format(sql, inserts);
+  exports.execute_query(req, sql, function(results) {
+    if(results["data"] != undefined) {
+      return callback({"data": "Success", "status": 200});
+    }
+    else {
+      return callback({"Error": results["error"], "status": results["status"]});
+    }
+  });
+};
