@@ -28,7 +28,8 @@ exports.get_filtered_products = function(request, response) {
         request.param.page = (request.param('page') != undefined ?  Common.compute_offset(request.param('page')) : 0)
         request.param.per_page = (request.param('per_page') != undefined ? request.param('per_page') : 24)
         Search.get_filtered_products(product_ids, request, function(filtered_products) {
-          page = Common.paginate(filtered_products["count"], request.param.page, request.param.per_page)
+          page_data = request.param('page') != undefined ? request.param('page') : 1
+          page = Common.paginate(filtered_products["count"], page_data, request.param.per_page)
           filtered_sale_ids = Common.fetch_ids(filtered_products["products"], "product")
           response.json({ "products": filtered_sale_ids, "filters": filters["filters"], "page": page });
         });

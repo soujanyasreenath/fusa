@@ -57,7 +57,7 @@ exports.get_sale_filters = function(ids, req, callback) {
     });
   }
   else {
-    return callback({"filters": "Please provide valid ids" ,"status": 404});
+    return callback({"filters": "Please provide valid path" ,"status": 404});
   }
 };
 
@@ -101,6 +101,6 @@ exports.get_filtered_sales = function(ids, req, callback) {
     });
   }
   else {
-    return callback({"sales": "Please provide valid ids" ,"status": 404});
+    return callback({"sales": "Please provide valid path" ,"status": 404});
   }
 };

@@ -7,9 +7,10 @@ exports.fetch_ids = function(data, val) {
 }
 
 exports.paginate = function(record_count, current_page, page_size) {
+  console.log(page_size);
   total_pages = Math.ceil(record_count / page_size);
   last_page = parseInt(total_pages);
-  current_page = parseInt(current_page) + 1 > parseInt(last_page) ? parseInt(last_page) : parseInt(current_page) + 1;
+  current_page = parseInt(current_page) + 1 > parseInt(last_page) ? parseInt(last_page) : parseInt(current_page);
   prev_page = parseInt(current_page) == 1 ? null : parseInt(current_page) - 1;
   next_page = parseInt(current_page) == parseInt(last_page) ? null : parseInt(current_page) + 1;
   page = { "total_pages": total_pages, "last_page": last_page, "prev_page": prev_page, "next_page": next_page, "current_page": current_page }
