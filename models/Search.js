@@ -75,7 +75,7 @@ exports.get_filters = function(ids, req, callback) {
     });
   }
   else {
-    return callback({ "filters": "Please provide valid ids" , "status": 404 });
+    return callback({ "filters": "Please provide valid keywords" , "status": 404 });
   }
 };
 
@@ -141,7 +141,7 @@ exports.get_filtered_products = function(ids, req, callback) {
     });
   }
   else {
-    return callback({ "products": "Please provide valid ids" , "status": 404 });
+    return callback({ "products": "Please provide valid keywords" , "status": 404 });
   }
 };
 

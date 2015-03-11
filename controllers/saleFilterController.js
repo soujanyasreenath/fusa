@@ -26,7 +26,8 @@ exports.get_filtered_sales = function(request, response) {
         request.param.page = (request.param('page') != undefined ?  Common.compute_offset(request.param('page')) : 0)
         request.param.per_page = (request.param('per_page') != undefined ? request.param('per_page') : 24)
         SaleFilter.get_filtered_sales(sale_ids, request, function(filtered_sales) {
-          page = Common.paginate(filtered_sales["count"], request.param.page, request.param.per_page)
+          page_data = request.param('page') != undefined ? request.param('page') : 1
+          page = Common.paginate(filtered_sales["count"], page_data, request.param.per_page)
           filtered_sale_ids = Common.fetch_ids(filtered_sales["sales"], "sale")
           response.json({ "sales": filtered_sale_ids, "filters": filters["filters"], "page": page });
         });
