@@ -51,12 +51,12 @@ exports.create = function(req, table_name, callback) {
       var columns = '';
       var sql = '';
       var values = [];
-      columns = Object.keys(req.body.data[1]); //Get the column names
-      sql = "insert into " + table_name + " (" + columns + ") values ?"; // TODO: Rework?
       // Parse the values of the request data to insert sql format.
       // Collects all the values tobe inserted
 
-      if (Array.isArray(req.body.data) == true) {
+      if (Array.isArray(req.body.data) == true && req.body.data.length > 0) {
+        columns = Object.keys(req.body.data[0]); //Get the column names
+        sql = "insert into " + table_name + " (" + columns + ") values ?"; // TODO: Rework?
         req.body.data.forEach( function(element) {
           values.push(Object.keys(element).map(function(key) {
             return element[key]
@@ -67,7 +67,7 @@ exports.create = function(req, table_name, callback) {
         }
       }
       else {
-        return callback({"Error": "Data has to be of type Array.", "status": 500});
+        return callback({"Error": "Received an empty data set or Data received is not an Array.", "status": 500});
       }
 
       // Sending sql and values for mysql
