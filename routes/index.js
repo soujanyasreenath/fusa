@@ -54,6 +54,14 @@ router.post('/api/insert_featured_sale_curation', function(req, res) {
   curationFeaturedSaleController.create(req, res);
 });
 
+router.post('/api/curationFeaturedSale_create', function(req, res) {
+  curationFeaturedSaleController.create(req, res);
+});
+
+router.post('/api/curationFeaturedSale_delete', function(req, res) {
+  curationFeaturedSaleController.delete(req, res);
+});
+
 /* Routes for Curation Tags */
 
 router.get('/api/get_all_curated_tags', function(req, res) {
