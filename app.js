@@ -34,6 +34,10 @@ app.get('/api/get_all_curated_newin', routes);
 app.post('/api/insert_newin_curation', routes);
 app.get('/api/get_all_curated_featured_sale', routes);
 app.post('/api/insert_featured_sale_curation', routes);
+app.post('/api/curationFeaturedSale_create', routes);
+app.post('/api/curationFeaturedSale_delete', routes);
+
+
 app.get('/api/get_all_curated_tags', routes);
 app.post('/api/insert_tags_curation', routes);
 app.get('/templates/:name', partials);
