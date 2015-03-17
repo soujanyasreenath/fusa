@@ -1,6 +1,7 @@
 var request = require("request");
 var mysql = require('mysql');
-exports.get_all_curated_featured_sales = function(req, callback) {
+
+exports.get_all_curated_tags = function(req, callback) {
   req.getConnection(function(err, connection) {
     if (err) {
       console.error('CONNECTION error: ', err);
@@ -11,9 +12,9 @@ exports.get_all_curated_featured_sales = function(req, callback) {
       });
     } 
     else {
-      tag_id = req.param("tag_id")
-      inserts = [tag_id]
-      sql = "select sale_id,sale_position from curation_featured_sale where tag_id = ?"
+      parent_tag_id = req.param("parent_tag_id")
+      inserts = [parent_tag_id]
+      sql = "select tag_id, tag_position from curation_tags where parent_tag_id = ?"
       sql = mysql.format(sql, inserts);
 
       connection.query(sql, function(err, rows) {
@@ -27,7 +28,7 @@ exports.get_all_curated_featured_sales = function(req, callback) {
         else {
           data = {}
           rows.forEach( function(element) {
-            data[element["sale_id"]] = element["sale_position"];
+            data[element["tag_id"]] = element["tag_position"];
           });
 
           console.log(data);
@@ -53,11 +54,12 @@ exports.create = function(req, callback) {
       if (req.body.data.tag_id == undefined) {
         return callback({"data": "Invalid tag_id", "status": 500});
       }
-      else if (req.body.data.sale_id == undefined) {
-        return callback({"data": "Invalid sale_id", "status": 500});
-      }
+      
 
-      sql = 'insert into curation_featured_sale (tag_id, sale_id, sale_position) values ("' + req.body.data.tag_id + '", "' + req.body.data.sale_id + '", "' + req.body.data.sale_position + '")'
+      sql = 'insert into curation_tags (tag_id, parent_tag_id, tag_position) values (?, ?, ?)'
+      inserts = [req.body.data.tag_id,req.body.data.parent_tag_id, req.body.data.tag_position]
+      sql = mysql.format(sql, inserts);
+
       connection.query(sql, function(err, rows) {
         if(err){
           console.log("Error Selecting : %s ", err);
@@ -85,24 +87,45 @@ exports.update = function(req, callback) {
       });
     } 
     else {
-      for (var key in req.body.data) {
+      console.log(req.body);
 
-        sql = "update curation_featured_sale set sale_position = ? where tag_id = ? and sale_id = ?"
-        inserts = [req.body.data[key], req.body.tag_id, key]
-        sql = mysql.format(sql, inserts);
+      if (req.body.parent_tag_id != 0) {
+        for (var key in req.body.data) {
 
-        connection.query(sql, function(err, rows) {
-          if (err) {
-            console.log("Error Selecting : %s ", err);
-            return callback({
-              "error": err,
-              "status": 500
-            });
-          }
+          sql = "update curation_tags set tag_position = ? where parent_tag_id = ? and tag_id = ?"
+          inserts = [req.body.data[key], req.body.parent_tag_id, key]
+          sql = mysql.format(sql, inserts);
+          
+          connection.query(sql, function(err, rows) {
+            if (err) {
+              console.log("Error Selecting : %s ", err);
+              return callback({
+                "error": err,
+                "status": 500
+              });
+            }
+          }); 
+        }
+      } 
+      else if (req.body.parent_tag_id == 0) {
+        for (var key in req.body.data) {
 
-        }); 
+          sql = "update curation_tags set tag_position = ? where tag_id = ? and parent_tag_id = 0"
+          inserts = [req.body.data[key], key]
+          sql = mysql.format(sql, inserts);
+
+          connection.query(sql, function(err, rows) {
+            if (err) {
+              console.log("Error Selecting : %s ", err);
+              return callback({
+                "error": err,
+                "status": 500
+              });
+            }
+          }); 
+        }
       }
-      return callback({"data": "Done", "status": 200}); 
+      return callback({"data": "Done", "status": 200});
     }
   });
 };
@@ -122,11 +145,18 @@ exports.delete = function(req, callback) {
       if (req.body.data.tag_id == undefined) {
         return callback({"data": "Invalid tag_id", "status": 500});
       }
-      else if (req.body.data.sale_id == undefined) {
-        return callback({"data": "Invalid sale_id", "status": 500});
+
+      console.log(req.body.data);
+
+      if (req.body.data.parent_tag_id == 0) {
+        sql = 'delete from curation_tags where tag_id = ? and parent_tag_id = 0' 
+        inserts = [req.body.data.tag_id] 
+      } else {
+        sql = 'delete from curation_tags where tag_id = ? and parent_tag_id = ?' 
+        inserts = [req.body.data.tag_id,req.body.data.parent_tag_id] 
       }
 
-      sql = 'delete from curation_featured_sale where tag_id = "' + req.body.data.tag_id + '" and sale_id = "' + req.body.data.sale_id + '"'
+      sql = mysql.format(sql, inserts);
       connection.query(sql, function(err, rows) {
         if (err) {
           console.log("Error Selecting : %s ", err);

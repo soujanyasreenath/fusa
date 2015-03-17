@@ -36,12 +36,24 @@ router.post('/api/get_filtered_products', function(req, res) {
 /* Routes Curation Data */
 /* Routes for Newin */
 
-router.get('/api/get_all_curated_newin', function(req, res) {
-  curationNewinController.index(req, res);
+router.get('/api/get_all_curated_newin_tags', function(req, res) {
+  curationNewinController.index_tags(req, res);
+});
+
+router.get('/api/get_all_curated_newin_sales', function(req, res) {
+  curationNewinController.index_sales(req, res);
 });
 
 router.post('/api/insert_newin_curation', function(req, res) {
   curationNewinController.create(req, res);
+});
+
+router.post('/api/update_newin_curation', function(req, res) {
+  curationNewinController.update(req, res);
+});
+
+router.post('/api/delete_newin_curation', function(req, res) {
+  curationNewinController.delete(req, res);
 });
 
 /* Routes for FeaturedSale */
@@ -54,11 +66,11 @@ router.post('/api/insert_featured_sale_curation', function(req, res) {
   curationFeaturedSaleController.create(req, res);
 });
 
-router.post('/api/curationFeaturedSale_create', function(req, res) {
-  curationFeaturedSaleController.create(req, res);
+router.post('/api/update_featured_sale_curation', function(req, res) {
+  curationFeaturedSaleController.update(req, res);
 });
 
-router.post('/api/curationFeaturedSale_delete', function(req, res) {
+router.post('/api/delete_featured_sale_curation', function(req, res) {
   curationFeaturedSaleController.delete(req, res);
 });
 
@@ -70,6 +82,14 @@ router.get('/api/get_all_curated_tags', function(req, res) {
 
 router.post('/api/insert_tags_curation', function(req, res) {
   curationTagsController.create(req, res);
+});
+
+router.post('/api/update_tags_curation', function(req, res) {
+  curationTagsController.update(req, res);
+});
+
+router.post('/api/delete_tags_curation', function(req, res) {
+  curationTagsController.delete(req, res);
 });
 
 module.exports = router;
