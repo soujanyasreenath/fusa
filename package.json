@@ -15,7 +15,8 @@
     "debug": "~2.0.0",
     "ejs": "~0.8.5",
     "express-myconnection": "1.0.4",
+    "sequelize": "^2.0.0-rc1",
     "mysql": "*",
-    "db-migrate": "0.9.7"
+    "sequelize-cli": "^0.3.0"
   }
 }
