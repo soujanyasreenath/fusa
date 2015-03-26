@@ -30,12 +30,24 @@ app.post('/api/get_filtered_sales', routes);
 app.get('/api/populate_product_filters', routes);
 app.post('/api/get_filtered_products', routes);
 
-app.get('/api/get_all_curated_newin', routes);
+app.get('/api/get_all_curated_newin_tags', routes);
+app.get('/api/get_all_curated_newin_sales', routes);
 app.post('/api/insert_newin_curation', routes);
+app.post('/api/update_newin_curation', routes);
+app.post('/api/delete_newin_curation', routes);
+
+
 app.get('/api/get_all_curated_featured_sale', routes);
 app.post('/api/insert_featured_sale_curation', routes);
+app.post('/api/update_featured_sale_curation', routes);
+app.post('/api/delete_featured_sale_curation', routes);
+
+
 app.get('/api/get_all_curated_tags', routes);
 app.post('/api/insert_tags_curation', routes);
+app.post('/api/update_tags_curation', routes);
+app.post('/api/delete_tags_curation', routes);
+
 app.get('/templates/:name', partials);
 
 // catch 404 and forward to error handler
