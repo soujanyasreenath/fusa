@@ -1,11 +1,11 @@
 var express = require('express');
 var router = express.Router();
-var searchController = require('../controllers/searchController');
-var saleFilterController = require('../controllers/saleFilterController');
-var productFilterController = require('../controllers/productFilterController');
+// var searchController = require('../controllers/searchController');
+// var saleFilterController = require('../controllers/saleFilterController');
+// var productFilterController = require('../controllers/productFilterController');
 var curationNewinController = require('../controllers/curationNewinController');
-var curationFeaturedSaleController = require('../controllers/curationFeaturedSaleController');
-var curationTagsController = require('../controllers/curationTagsController');
+// var curationFeaturedSaleController = require('../controllers/curationFeaturedSaleController');
+// var curationTagsController = require('../controllers/curationTagsController');
 
 /* Routes for Search and Filters. */
 router.get('/api/populate_filters', function(req, res) {
