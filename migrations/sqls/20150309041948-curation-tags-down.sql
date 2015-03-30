@@ -1,1 +1,0 @@
-DROP TABLE curation_tags;

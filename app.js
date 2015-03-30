@@ -7,10 +7,10 @@ var bodyParser = require('body-parser');
 var routes = require('./routes/index');
 var partials = require('./routes/partials');
 var app = express();
-var dbOptions = require('./database.json')[app.get('env')];
-var mysql = require('mysql'), // node-mysql module
-connection = require('express-myconnection'); // express-myconnection module
-app.use(connection(mysql, dbOptions, 'single'));
+// var dbOptions = require('./database.json')[app.get('env')];
+// var mysql = require('mysql'), // node-mysql module
+// connection = require('express-myconnection'); // express-myconnection module
+// app.use(connection(mysql, dbOptions, 'single'));
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
